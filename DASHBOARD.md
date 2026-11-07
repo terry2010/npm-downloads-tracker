@@ -22,7 +22,18 @@ _Last updated: 2026-11-07 13:46 UTC_
 | `oc-market-quail-zephyr-72a0` | 836 | 119.4 | 407 · 11-02 | 0 | ▁█▁▇▁▁▁ |
 | `awesome-opencode-market` | 306 | 43.7 | 280 · 11-04 | 0 | ▁▁▁█▁▁▁ |
 
-![Daily downloads — 2026-11](charts/2026-11.svg)
+```mermaid
+%%{init: {'xyChart': {'width': 960, 'height': 320}}}%%
+xychart-beta
+    title "Daily downloads - 2026-11"
+    x-axis ["1", "2", "3", "4", "5", "6", "7"]
+    y-axis "downloads" 0 --> 500
+    line "dsh-loop-recover" [43, 46, 39, 99, 329, 88, 0]
+    line "dsh-rss-news-daily" [58, 209, 359, 237, 361, 70, 0]
+    line "opencode-loop-recover" [105, 74, 228, 63, 19, 16, 0]
+    line "oc-market-quail-zephyr-72a0" [0, 407, 22, 354, 39, 14, 0]
+    line "awesome-opencode-market" [0, 0, 0, 280, 17, 9, 0]
+```
 
 ### Daily — 2026-11
 
@@ -46,7 +57,18 @@ _Last updated: 2026-11-07 13:46 UTC_
 <details>
 <summary>Daily downloads — 2026-10</summary>
 
-![Daily downloads — 2026-10](charts/2026-10.svg)
+```mermaid
+%%{init: {'xyChart': {'width': 960, 'height': 320}}}%%
+xychart-beta
+    title "Daily downloads - 2026-10"
+    x-axis ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"]
+    y-axis "downloads" 0 --> 1000
+    line "dsh-loop-recover" [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 422, 291, 326, 346, 68]
+    line "dsh-rss-news-daily" [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 834, 397, 214, 525, 244]
+    line "opencode-loop-recover" [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 767]
+    line "oc-market-quail-zephyr-72a0" [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    line "awesome-opencode-market" [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+```
 
 | Date | `dsh-loop-recover` | `dsh-rss-news-daily` | `opencode-loop-recover` | `oc-market-quail-zephyr-72a0` | `awesome-opencode-market` | Total |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |

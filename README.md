@@ -19,7 +19,7 @@ To watch more packages, edit `packages.json`.
 - `.github/workflows/daily.yml` runs `scripts/update.mjs` daily at 00:00 UTC (08:00 Beijing time), plus on-demand via `workflow_dispatch`.
 - npm often leaves recent days at 0 or missing, then backfills them in batches days later. Every run re-fetches the whole previous-month + current-month-to-date range per package (`https://api.npmjs.org/downloads/range/<prev-month-01>:<today>/<pkg>`), so corrections are picked up automatically on the next run.
 - Data files are only rewritten when numbers actually change, so the repo stays quiet while npm has nothing new. `DASHBOARD.md`'s "Last updated" reflects the last real data change.
-- Results are stored in `data/YYYY-MM.json` (sparse `date -> downloads` maps per package), an SVG line chart per month is rendered to `charts/YYYY-MM.svg`, and `DASHBOARD.md` is regenerated with both embedded.
+- Results are stored in `data/YYYY-MM.json` (sparse `date -> downloads` maps per package), a mermaid `xychart-beta` line chart per month is embedded in `DASHBOARD.md`, which is regenerated alongside.
 
 ## Commands
 

@@ -10,7 +10,6 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DATA_DIR = path.join(ROOT, 'data');
-const CHARTS_DIR = path.join(ROOT, 'charts');
 const DASHBOARD_PATH = path.join(ROOT, 'DASHBOARD.md');
 const PACKAGES = JSON.parse(await readFile(path.join(ROOT, 'packages.json'), 'utf8'));
 
@@ -24,17 +23,6 @@ const FETCH_MONTHS = [prevYm, currentYm];
 
 const nf = new Intl.NumberFormat('en-US');
 const BARS = '▁▂▃▄▅▆▇█';
-const PALETTE = [
-  '#4C78A8',
-  '#F58518',
-  '#54A24B',
-  '#E45756',
-  '#72B7B2',
-  '#B279A2',
-  '#FF9DA6',
-  '#9D755D',
-  '#BAB0AC',
-];
 const dHeaders = ['Date', ...PACKAGES.map((p) => `\`${p}\``), 'Total'];
 
 function lastDayOf(ym) {
@@ -142,9 +130,6 @@ function dailyRows(file, days, boldToday = false) {
   });
 }
 
-const CHART_W = 960;
-const CHART_H = 340;
-
 function niceCeil(v) {
   if (v <= 0) return 1;
   const p = Math.pow(10, Math.floor(Math.log10(v)));
@@ -152,100 +137,36 @@ function niceCeil(v) {
   return (n <= 1 ? 1 : n <= 2 ? 2 : n <= 5 ? 5 : 10) * p;
 }
 
-function fmtTick(v) {
-  return Number.isInteger(v) ? nf.format(v) : String(parseFloat(v.toFixed(2)));
-}
-
-function renderChart(file, days) {
-  const left = 48;
-  const right = 16;
-  const top = 34;
-  const bottom = 30;
-  const pw = CHART_W - left - right;
-  const ph = CHART_H - top - bottom;
-  const n = days.length;
-  const r1 = (v) => Math.round(v * 10) / 10;
-
+function renderMermaid(file, days) {
   const series = [];
-  PACKAGES.forEach((pkg, i) => {
+  PACKAGES.forEach((pkg) => {
     const map = file?.packages?.[pkg];
     if (!map || file?.errors?.[pkg]) return;
-    series.push({
-      name: pkg,
-      color: PALETTE[i % PALETTE.length],
-      vals: days.map((d) => map[d] ?? 0),
-    });
+    series.push({ name: pkg, vals: days.map((d) => map[d] ?? 0) });
   });
+  if (!series.length) return null;
 
   const maxV = niceCeil(Math.max(0, ...series.flatMap((s) => s.vals)));
-  const xAt = (i) => (n === 1 ? left + pw / 2 : left + (i / (n - 1)) * pw);
-  const yAt = (v) => top + ph - (v / maxV) * ph;
+  const xLabels = days.map((d) => `"${Number(d.slice(8))}"`).join(', ');
+  const lines = series.map(
+    (s) => `    line "${s.name}" [${s.vals.join(', ')}]`
+  );
 
-  const parts = [
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${CHART_W} ${CHART_H}" role="img">`,
-    `<title>Daily npm downloads — ${file.month}</title>`,
-    '<style>',
-    '.bg{fill:#fff}.grid{stroke:#e5e7eb;stroke-width:1}.base{stroke:#d0d7de}.lbl{fill:#57606a;font:10px -apple-system,"Segoe UI",sans-serif}',
-    '@media (prefers-color-scheme:dark){.bg{fill:#0d1117}.grid{stroke:#30363d}.base{stroke:#484f58}.lbl{fill:#8b949e}}',
-    '</style>',
-    `<rect class="bg" width="${CHART_W}" height="${CHART_H}" rx="8"/>`,
-  ];
-
-  let lx = left;
-  for (const s of series) {
-    parts.push(
-      `<line x1="${r1(lx)}" y1="16" x2="${r1(lx + 14)}" y2="16" stroke="${s.color}" stroke-width="2.5"/>`,
-      `<text class="lbl" x="${r1(lx + 18)}" y="19.5">${s.name}</text>`
-    );
-    lx += 36 + s.name.length * 6;
-  }
-
-  for (let k = 0; k <= 4; k++) {
-    const v = (maxV * k) / 4;
-    const y = r1(yAt(v));
-    parts.push(
-      `<line class="${k === 0 ? 'base' : 'grid'}" x1="${left}" y1="${y}" x2="${left + pw}" y2="${y}"/>`,
-      `<text class="lbl" x="${left - 8}" y="${r1(y + 3.5)}" text-anchor="end">${fmtTick(v)}</text>`
-    );
-  }
-
-  const xIdx = [
-    ...new Set(
-      Array.from({ length: 6 }, (_, i) => Math.round((i * (n - 1)) / 5))
-    ),
-  ];
-  for (const idx of xIdx) {
-    parts.push(
-      `<text class="lbl" x="${r1(xAt(idx))}" y="${CHART_H - 8}" text-anchor="middle">${days[idx].slice(5)}</text>`
-    );
-  }
-
-  for (const s of series) {
-    const pts = s.vals.map((v, i) => `${r1(xAt(i))},${r1(yAt(v))}`).join(' ');
-    parts.push(
-      `<polyline points="${pts}" fill="none" stroke="${s.color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`
-    );
-    s.vals.forEach((v, i) => {
-      parts.push(
-        `<circle cx="${r1(xAt(i))}" cy="${r1(yAt(v))}" r="2.2" fill="${s.color}"/>`
-      );
-    });
-  }
-
-  if (!series.length) {
-    parts.push(
-      `<text class="lbl" x="${CHART_W / 2}" y="${CHART_H / 2}" text-anchor="middle">no data</text>`
-    );
-  }
-
-  parts.push('</svg>');
-  return parts.join('\n');
+  return [
+    '```mermaid',
+    "%%{init: {'xyChart': {'width': 960, 'height': 320}}}%%",
+    'xychart-beta',
+    `    title "Daily downloads - ${file.month}"`,
+    `    x-axis [${xLabels}]`,
+    `    y-axis "downloads" 0 --> ${maxV}`,
+    ...lines,
+    '```',
+  ].join('\n');
 }
 
 // ---------- fetch & store ----------
 
 await mkdir(DATA_DIR, { recursive: true });
-await mkdir(CHARTS_DIR, { recursive: true });
 
 const months = new Map();
 const snapshots = new Map();
@@ -380,9 +301,8 @@ if (!cur) {
     );
   }
 
-  const chartRel = `charts/${currentYm}.svg`;
-  await writeFile(path.join(ROOT, chartRel), renderChart(cur, days));
-  L.push(`![Daily downloads — ${currentYm}](${chartRel})`, '');
+  const mm = renderMermaid(cur, days);
+  if (mm) L.push(mm, '');
 
   L.push(`### Daily — ${currentYm}`, '', ...mdTable(dHeaders, dailyRows(cur, days, true)), '');
 }
@@ -410,15 +330,14 @@ const past = allMonths
   .filter((m) => m.month !== currentYm)
   .sort((a, b) => b.month.localeCompare(a.month));
 for (const m of past) {
-  const chartRel = `charts/${m.month}.svg`;
-  await writeFile(path.join(ROOT, chartRel), renderChart(m, daysOf(m.month)));
+  const mDays = daysOf(m.month);
+  const mm = renderMermaid(m, mDays);
   L.push(
     '<details>',
     `<summary>Daily downloads — ${m.month}</summary>`,
     '',
-    `![Daily downloads — ${m.month}](${chartRel})`,
-    '',
-    ...mdTable(dHeaders, dailyRows(m, daysOf(m.month))),
+    ...(mm ? [mm, ''] : []),
+    ...mdTable(dHeaders, dailyRows(m, mDays)),
     '',
     '</details>',
     ''
