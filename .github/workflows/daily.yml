@@ -2,7 +2,7 @@ name: Update downloads dashboard
 
 on:
   schedule:
-    - cron: '0 0 * * *' # 00:00 UTC = 08:00 Beijing time
+    - cron: '13 * * * *' # hourly at :13 UTC — npm backfills recent days in batches, hourly picks corrections up fast
   workflow_dispatch:
 
 permissions:

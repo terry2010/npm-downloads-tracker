@@ -49,6 +49,16 @@ function sparkline(values) {
     .join('');
 }
 
+function stable(value) {
+  return JSON.stringify(value, (_, x) =>
+    x && typeof x === 'object' && !Array.isArray(x)
+      ? Object.fromEntries(
+          Object.entries(x).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
+        )
+      : x
+  );
+}
+
 function mdTable(headers, rows) {
   const lines = [
     `| ${headers.join(' | ')} |`,
@@ -125,7 +135,15 @@ function dailyRows(file, days, boldToday = false) {
 await mkdir(DATA_DIR, { recursive: true });
 
 const months = new Map();
-for (const ym of FETCH_MONTHS) months.set(ym, await loadMonth(ym));
+const snapshots = new Map();
+for (const ym of FETCH_MONTHS) {
+  const f = await loadMonth(ym);
+  months.set(ym, f);
+  snapshots.set(ym, {
+    packages: structuredClone(f.packages),
+    errors: structuredClone(f.errors ?? {}),
+  });
+}
 
 const results = await Promise.all(
   PACKAGES.map(async (pkg) => {
@@ -154,12 +172,19 @@ for (const { pkg, rows, error } of results) {
 }
 
 const fetchedAt = new Date().toISOString();
+const touched = [];
 for (const [ym, file] of months) {
+  const snap = snapshots.get(ym);
+  const changed =
+    stable(snap.packages) !== stable(file.packages) ||
+    stable(snap.errors ?? {}) !== stable(file.errors ?? {});
+  if (!changed && file.fetchedAt) continue;
   file.fetchedAt = fetchedAt;
   await writeFile(
     path.join(DATA_DIR, `${ym}.json`),
     JSON.stringify(file, null, 2) + '\n'
   );
+  touched.push(`data/${ym}.json`);
 }
 
 // ---------- dashboard ----------
@@ -284,7 +309,8 @@ await writeFile(DASHBOARD_PATH, L.join('\n') + '\n');
 
 console.log(
   `fetched ${results.filter((r) => !r.error).length}/${PACKAGES.length} packages; ` +
-    `wrote ${FETCH_MONTHS.map((ym) => `data/${ym}.json`).join(', ')} + DASHBOARD.md`
+    (touched.length ? `wrote ${touched.join(', ')}` : 'no data changes') +
+    ' + DASHBOARD.md'
 );
 for (const r of results.filter((r) => r.error)) {
   console.error(`  ! ${r.pkg}: ${r.error}`);
