@@ -22,6 +22,8 @@ _Last updated: 2026-11-07 13:46 UTC_
 | `oc-market-quail-zephyr-72a0` | 836 | 119.4 | 407 · 11-02 | 0 | ▁█▁▇▁▁▁ |
 | `awesome-opencode-market` | 306 | 43.7 | 280 · 11-04 | 0 | ▁▁▁█▁▁▁ |
 
+![Daily downloads — 2026-11](charts/2026-11.svg)
+
 ### Daily — 2026-11
 
 | Date | `dsh-loop-recover` | `dsh-rss-news-daily` | `opencode-loop-recover` | `oc-market-quail-zephyr-72a0` | `awesome-opencode-market` | Total |
@@ -43,6 +45,8 @@ _Last updated: 2026-11-07 13:46 UTC_
 
 <details>
 <summary>Daily downloads — 2026-10</summary>
+
+![Daily downloads — 2026-10](charts/2026-10.svg)
 
 | Date | `dsh-loop-recover` | `dsh-rss-news-daily` | `opencode-loop-recover` | `oc-market-quail-zephyr-72a0` | `awesome-opencode-market` | Total |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
