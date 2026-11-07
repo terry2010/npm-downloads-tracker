@@ -1,0 +1,10 @@
+{
+  "name": "npm-downloads-tracker",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Daily npm download stats for watched packages",
+  "scripts": {
+    "update": "node scripts/update.mjs"
+  }
+}
