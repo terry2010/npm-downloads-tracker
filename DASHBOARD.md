@@ -2,7 +2,7 @@
 
 Daily download counts for watched npm packages, fetched every morning (00:00 UTC / 08:00 Beijing time) by GitHub Actions.
 
-_Last updated: 2026-11-08 10:41 UTC_
+_Last updated: 2026-11-09 03:39 UTC_
 
 ## Watched packages
 
@@ -16,23 +16,23 @@ _Last updated: 2026-11-08 10:41 UTC_
 
 | Package | Total | Avg/day | Peak | Today | Trend |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| `dsh-loop-recover` | 710 | 88.8 | 329 · 11-05 | 0 | ▂▂▁▃█▃▂▁ |
-| `dsh-rss-news-daily` | 1,355 | 169.4 | 361 · 11-05 | 0 | ▂▅█▆█▂▂▁ |
-| `opencode-loop-recover` | 557 | 69.6 | 228 · 11-03 | 0 | ▄▃█▃▁▁▂▁ |
-| `oc-market-quail-zephyr-72a0` | 851 | 106.4 | 407 · 11-02 | 0 | ▁█▁▇▁▁▁▁ |
-| `awesome-opencode-market` | 323 | 40.4 | 280 · 11-04 | 0 | ▁▁▁█▁▁▁▁ |
+| `dsh-loop-recover` | 710 | 78.9 | 329 · 11-05 | 0 | ▂▂▁▃█▃▂▁▁ |
+| `dsh-rss-news-daily` | 1,355 | 150.6 | 361 · 11-05 | 0 | ▂▅█▆█▂▂▁▁ |
+| `opencode-loop-recover` | 557 | 61.9 | 228 · 11-03 | 0 | ▄▃█▃▁▁▂▁▁ |
+| `oc-market-quail-zephyr-72a0` | 851 | 94.6 | 407 · 11-02 | 0 | ▁█▁▇▁▁▁▁▁ |
+| `awesome-opencode-market` | 323 | 35.9 | 280 · 11-04 | 0 | ▁▁▁█▁▁▁▁▁ |
 
 ```mermaid
 %%{init: {'xyChart': {'width': 960, 'height': 320}}}%%
 xychart-beta
     title "Daily downloads - 2026-11"
-    x-axis ["1", "2", "3", "4", "5", "6", "7", "8"]
+    x-axis ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
     y-axis "downloads" 0 --> 500
-    line "dsh-loop-recover" [43, 46, 39, 99, 329, 88, 66, 0]
-    line "dsh-rss-news-daily" [58, 209, 359, 237, 361, 70, 61, 0]
-    line "opencode-loop-recover" [105, 74, 228, 63, 19, 16, 52, 0]
-    line "oc-market-quail-zephyr-72a0" [0, 407, 22, 354, 39, 14, 15, 0]
-    line "awesome-opencode-market" [0, 0, 0, 280, 17, 9, 17, 0]
+    line "dsh-loop-recover" [43, 46, 39, 99, 329, 88, 66, 0, 0]
+    line "dsh-rss-news-daily" [58, 209, 359, 237, 361, 70, 61, 0, 0]
+    line "opencode-loop-recover" [105, 74, 228, 63, 19, 16, 52, 0, 0]
+    line "oc-market-quail-zephyr-72a0" [0, 407, 22, 354, 39, 14, 15, 0, 0]
+    line "awesome-opencode-market" [0, 0, 0, 280, 17, 9, 17, 0, 0]
 ```
 
 ### Daily — 2026-11
@@ -46,7 +46,8 @@ xychart-beta
 | 2026-11-05 | 329 | 361 | 19 | 39 | 17 | 765 |
 | 2026-11-06 | 88 | 70 | 16 | 14 | 9 | 197 |
 | 2026-11-07 | 66 | 61 | 52 | 15 | 17 | 211 |
-| **2026-11-08** | 0 | 0 | 0 | 0 | 0 | 0 |
+| 2026-11-08 | 0 | 0 | 0 | 0 | 0 | 0 |
+| **2026-11-09** | 0 | 0 | 0 | 0 | 0 | 0 |
 
 ## Monthly history
 
