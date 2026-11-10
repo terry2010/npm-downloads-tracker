@@ -2,7 +2,7 @@
 
 Daily download counts for watched npm packages, fetched every morning (00:00 UTC / 08:00 Beijing time) by GitHub Actions.
 
-_Last updated: 2026-11-10 04:38 UTC_
+_Last updated: 2026-11-10 18:36 UTC_
 
 ## Watched packages
 
@@ -16,11 +16,11 @@ _Last updated: 2026-11-10 04:38 UTC_
 
 | Package | Total | Avg/day | Peak | Today | Trend |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| `dsh-loop-recover` | 766 | 76.6 | 329 · 11-05 | 0 | ▂▂▁▃█▃▂▂▁▁ |
-| `dsh-rss-news-daily` | 1,579 | 157.9 | 361 · 11-05 | 0 | ▂▅█▆█▂▂▅▁▁ |
-| `opencode-loop-recover` | 563 | 56.3 | 228 · 11-03 | 0 | ▄▃█▃▁▁▂▁▁▁ |
-| `oc-market-quail-zephyr-72a0` | 858 | 85.8 | 407 · 11-02 | 0 | ▁█▁▇▁▁▁▁▁▁ |
-| `awesome-opencode-market` | 345 | 34.5 | 280 · 11-04 | 0 | ▁▁▁█▁▁▁▁▁▁ |
+| `dsh-loop-recover` | 793 | 79.3 | 329 · 11-05 | 0 | ▂▂▁▃█▃▂▂▁▁ |
+| `dsh-rss-news-daily` | 1,982 | 198.2 | 403 · 11-09 | 0 | ▂▅█▅█▂▂▅█▁ |
+| `opencode-loop-recover` | 573 | 57.3 | 228 · 11-03 | 0 | ▄▃█▃▁▁▂▁▁▁ |
+| `oc-market-quail-zephyr-72a0` | 898 | 89.8 | 407 · 11-02 | 0 | ▁█▁▇▁▁▁▁▁▁ |
+| `awesome-opencode-market` | 349 | 34.9 | 280 · 11-04 | 0 | ▁▁▁█▁▁▁▁▁▁ |
 
 ```mermaid
 %%{init: {'xyChart': {'width': 960, 'height': 320}}}%%
@@ -28,11 +28,11 @@ xychart-beta
     title "Daily downloads - 2026-11"
     x-axis ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
     y-axis "downloads" 0 --> 500
-    line "dsh-loop-recover" [43, 46, 39, 99, 329, 88, 66, 56, 0, 0]
-    line "dsh-rss-news-daily" [58, 209, 359, 237, 361, 70, 61, 224, 0, 0]
-    line "opencode-loop-recover" [105, 74, 228, 63, 19, 16, 52, 6, 0, 0]
-    line "oc-market-quail-zephyr-72a0" [0, 407, 22, 354, 39, 14, 15, 7, 0, 0]
-    line "awesome-opencode-market" [0, 0, 0, 280, 17, 9, 17, 22, 0, 0]
+    line "dsh-loop-recover" [43, 46, 39, 99, 329, 88, 66, 56, 27, 0]
+    line "dsh-rss-news-daily" [58, 209, 359, 237, 361, 70, 61, 224, 403, 0]
+    line "opencode-loop-recover" [105, 74, 228, 63, 19, 16, 52, 6, 10, 0]
+    line "oc-market-quail-zephyr-72a0" [0, 407, 22, 354, 39, 14, 15, 7, 40, 0]
+    line "awesome-opencode-market" [0, 0, 0, 280, 17, 9, 17, 22, 4, 0]
 ```
 
 ### Daily — 2026-11
@@ -47,7 +47,7 @@ xychart-beta
 | 2026-11-06 | 88 | 70 | 16 | 14 | 9 | 197 |
 | 2026-11-07 | 66 | 61 | 52 | 15 | 17 | 211 |
 | 2026-11-08 | 56 | 224 | 6 | 7 | 22 | 315 |
-| 2026-11-09 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 2026-11-09 | 27 | 403 | 10 | 40 | 4 | 484 |
 | **2026-11-10** | 0 | 0 | 0 | 0 | 0 | 0 |
 
 ## Monthly history
@@ -55,7 +55,7 @@ xychart-beta
 | Month | `dsh-loop-recover` | `dsh-rss-news-daily` | `opencode-loop-recover` | `oc-market-quail-zephyr-72a0` | `awesome-opencode-market` | Grand total |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | 2026-10 | 1,453 | 2,214 | 767 | 0 | 0 | 4,434 |
-| 2026-11 (MTD) | 766 | 1,579 | 563 | 858 | 345 | 4,111 |
+| 2026-11 (MTD) | 793 | 1,982 | 573 | 898 | 349 | 4,595 |
 
 <details>
 <summary>Daily downloads — 2026-10</summary>
