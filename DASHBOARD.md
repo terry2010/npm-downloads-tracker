@@ -2,7 +2,7 @@
 
 Daily download counts for watched npm packages, fetched every morning (00:00 UTC / 08:00 Beijing time) by GitHub Actions.
 
-_Last updated: 2026-11-14 13:28 UTC_
+_Last updated: 2026-11-14 16:32 UTC_
 
 ## Watched packages
 
@@ -66,7 +66,7 @@ xychart-beta
 
 | Image | All-time pulls | 2026-11 est. | Today | Trend |
 | --- | ---: | ---: | ---: | ---: |
-| `terry2010/surfbird` | 577 | — | — | ▁▁▁▁▁▁▁▁▁▁▁▁▁▁ |
+| `terry2010/surfbird` | 579 | — | — | ▁▁▁▁▁▁▁▁▁▁▁▁▁▁ |
 
 > Docker Hub only exposes a cumulative `pull_count` — daily figures are diffs between once-a-day snapshots, so they lag ~1 day. `≈` marks days inside a missed-run gap (delta spread evenly). Same bot-wave caveat as npm: new tags get pulled by image scanners.
 
