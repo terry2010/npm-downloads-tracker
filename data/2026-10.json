@@ -1,6 +1,6 @@
 {
   "month": "2026-10",
-  "fetchedAt": "2026-11-07T13:46:24.291Z",
+  "fetchedAt": "2026-11-14T08:43:39.270Z",
   "packages": {
     "dsh-loop-recover": {
       "2026-10-01": 0,
@@ -168,5 +168,8 @@
       "2026-10-31": 0
     }
   },
-  "errors": {}
+  "errors": {
+    "surfbird": "HTTP 404",
+    "surfbird-mcp": "HTTP 404"
+  }
 }

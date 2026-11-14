@@ -1,6 +1,6 @@
 {
   "month": "2026-11",
-  "fetchedAt": "2026-11-14T04:00:15.805Z",
+  "fetchedAt": "2026-11-14T08:56:29.518Z",
   "packages": {
     "dsh-loop-recover": {
       "2026-11-01": 43,
@@ -83,5 +83,13 @@
       "2026-11-14": 0
     }
   },
-  "errors": {}
+  "errors": {
+    "surfbird": "HTTP 404",
+    "surfbird-mcp": "HTTP 404"
+  },
+  "docker": {
+    "terry2010/surfbird": {
+      "2026-11-14": 426
+    }
+  }
 }
