@@ -2,7 +2,7 @@ name: Update downloads dashboard
 
 on:
   schedule:
-    - cron: '0 0 * * *' # 00:00 UTC = 08:00 Beijing time
+    - cron: '10 16 * * *' # 16:10 UTC = 00:10 Beijing time
   workflow_dispatch:
 
 permissions:

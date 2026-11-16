@@ -482,7 +482,7 @@ function dockerDailyRows(m, days) {
 const L = [];
 L.push('# NPM Downloads Tracker', '');
 L.push(
-  'Daily download counts for watched npm packages, fetched every morning (00:00 UTC / 08:00 Beijing time) by GitHub Actions.',
+  'Daily download counts for watched npm packages, fetched daily at 16:10 UTC (00:10 Beijing time) by GitHub Actions.',
   'Days roll over at midnight Beijing time (UTC+8); npm per-day counts are UTC-day buckets, so the "today" row may stay 0 until the UTC day starts.',
   ''
 );
