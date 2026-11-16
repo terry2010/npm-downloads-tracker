@@ -32,7 +32,14 @@ const DOCKER_IMAGES =
   );
 
 const now = new Date();
-const today = now.toISOString().slice(0, 10);
+// "Today" rolls over at 00:00 Beijing time (UTC+8, i.e. 16:00 UTC): the
+// dashboard is read in UTC+8, so snapshot keys, the bold "today" row and
+// month boundaries all follow it. npm's per-day buckets are UTC days and
+// can't be re-bucketed — its fetch range is clamped to the UTC date below.
+const today = new Date(now.getTime() + 8 * 3600 * 1000)
+  .toISOString()
+  .slice(0, 10);
+const utcToday = now.toISOString().slice(0, 10);
 const currentYm = today.slice(0, 7);
 const [cy, cm] = currentYm.split('-').map(Number);
 const prevYm = new Date(Date.UTC(cy, cm - 2, 1)).toISOString().slice(0, 7);
@@ -158,7 +165,7 @@ async function fetchJson(url) {
 }
 
 async function fetchRange(pkg) {
-  const url = `https://api.npmjs.org/downloads/range/${rangeStart}:${today}/${pkg}`;
+  const url = `https://api.npmjs.org/downloads/range/${rangeStart}:${utcToday}/${pkg}`;
   const body = await fetchJson(url);
   if (!Array.isArray(body.downloads)) throw new Error('unexpected response shape');
   return body.downloads;
@@ -476,6 +483,7 @@ const L = [];
 L.push('# NPM Downloads Tracker', '');
 L.push(
   'Daily download counts for watched npm packages, fetched every morning (00:00 UTC / 08:00 Beijing time) by GitHub Actions.',
+  'Days roll over at midnight Beijing time (UTC+8); npm per-day counts are UTC-day buckets, so the "today" row may stay 0 until the UTC day starts.',
   ''
 );
 

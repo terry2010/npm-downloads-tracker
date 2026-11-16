@@ -50,7 +50,7 @@ npm run update   # fetch latest data and rebuild the dashboard
 
 ## Notes
 
-- Day boundaries follow npm's daily counts (UTC).
+- "Today" (snapshot keys, bold row, month boundaries) rolls over at midnight Beijing time (UTC+8 = 16:00 UTC). npm's per-day counts are UTC-day buckets and can't be re-bucketed, so the "today" row may show 0 until the UTC day starts.
 - npm's own processing delay is outside our control — we mirror whatever the API returns and correct it on the next run after npm backfills.
 - GitHub scheduled runs can be delayed a few minutes under load; since every run refreshes the full month-to-date range, nothing is lost.
 - Scheduled workflows are auto-disabled after 60 days of repository inactivity — the data commits keep the repo active.

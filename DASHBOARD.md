@@ -1,6 +1,7 @@
 # NPM Downloads Tracker
 
 Daily download counts for watched npm packages, fetched every morning (00:00 UTC / 08:00 Beijing time) by GitHub Actions.
+Days roll over at midnight Beijing time (UTC+8); npm per-day counts are UTC-day buckets, so the "today" row may stay 0 until the UTC day starts.
 
 _Last updated: 2026-11-16 09:00 UTC_
 
