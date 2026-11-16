@@ -1,6 +1,6 @@
 {
   "month": "2026-10",
-  "fetchedAt": "2026-11-14T13:28:20.368Z",
+  "fetchedAt": "2026-11-16T05:07:50.693Z",
   "packages": {
     "dsh-loop-recover": {
       "2026-10-01": 0,
@@ -234,6 +234,9 @@
       "2026-10-31": 0
     }
   },
-  "errors": {},
+  "errors": {
+    "dsh-control-surfbird-for-kitesurf": "HTTP 404",
+    "opencode-control-surfbird-for-kitesurf": "HTTP 404"
+  },
   "docker": {}
 }
