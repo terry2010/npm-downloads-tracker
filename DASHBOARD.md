@@ -2,7 +2,7 @@
 
 Daily download counts for watched npm packages, fetched every morning (00:00 UTC / 08:00 Beijing time) by GitHub Actions.
 
-_Last updated: 2026-11-15 17:21 UTC_
+_Last updated: 2026-11-16 02:30 UTC_
 
 ## Watched packages
 
@@ -18,13 +18,13 @@ _Last updated: 2026-11-15 17:21 UTC_
 
 | Package | Total | Est. real | Avg/day | Peak | Today | Trend |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| `dsh-loop-recover` | 1,236 | 786 | 82.4 | 329 · 11-05 | 0 | ▂▂▁▃█▃▂▂▁▂▂▂▆▂▁ |
-| `dsh-rss-news-daily` | 2,955 | 1,155 | 197.0 | 403 · 11-09 | 0 | ▂▅█▅█▂▂▅█▂▂▆▆▆▁ |
-| `opencode-loop-recover` | 725 | 575 | 48.3 | 228 · 11-03 | 0 | ▄▃█▃▁▁▂▁▁▁▁▂▂▂▁ |
-| `oc-market-quail-zephyr-72a0` | 1,476 | 319 | 98.4 | 505 · 11-12 | 0 | ▁▇▁▆▁▁▁▁▁▁▁█▁▁▁ |
-| `awesome-opencode-market` | 552 | 122 | 36.8 | 280 · 11-04 | 0 | ▁▁▁█▁▁▁▁▁▁▁▅▁▁▁ |
-| `surfbird` | 679 | 112 | 45.3 | 412 · 11-14 | 0 | ▁▁▁▁▁▁▁▁▁▁▁▁▆█▁ |
-| `surfbird-mcp` | 684 | 108 | 45.6 | 408 · 11-14 | 0 | ▁▁▁▁▁▁▁▁▁▁▁▁▆█▁ |
+| `dsh-loop-recover` | 1,236 | 786 | 77.3 | 329 · 11-05 | 0 | ▂▂▁▃█▃▂▂▁▂▂▂▆▂▁▁ |
+| `dsh-rss-news-daily` | 2,955 | 1,155 | 184.7 | 403 · 11-09 | 0 | ▂▅█▅█▂▂▅█▂▂▆▆▆▁▁ |
+| `opencode-loop-recover` | 725 | 575 | 45.3 | 228 · 11-03 | 0 | ▄▃█▃▁▁▂▁▁▁▁▂▂▂▁▁ |
+| `oc-market-quail-zephyr-72a0` | 1,476 | 319 | 92.3 | 505 · 11-12 | 0 | ▁▇▁▆▁▁▁▁▁▁▁█▁▁▁▁ |
+| `awesome-opencode-market` | 552 | 122 | 34.5 | 280 · 11-04 | 0 | ▁▁▁█▁▁▁▁▁▁▁▅▁▁▁▁ |
+| `surfbird` | 679 | 112 | 42.4 | 412 · 11-14 | 0 | ▁▁▁▁▁▁▁▁▁▁▁▁▆█▁▁ |
+| `surfbird-mcp` | 684 | 108 | 42.8 | 408 · 11-14 | 0 | ▁▁▁▁▁▁▁▁▁▁▁▁▆█▁▁ |
 
 > `Est. real` subtracts ~150 automated downloads per version published that day — every `npm publish` triggers a scanner/mirror fetch wave. It's an upper bound on organic installs (ambient crawlers and CI can't be separated).
 
@@ -32,15 +32,15 @@ _Last updated: 2026-11-15 17:21 UTC_
 %%{init: {'xyChart': {'width': 960, 'height': 320}}}%%
 xychart-beta
     title "Daily downloads - 2026-11"
-    x-axis ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"]
+    x-axis ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"]
     y-axis "downloads" 0 --> 1000
-    line "dsh-loop-recover" [43, 46, 39, 99, 329, 88, 66, 56, 27, 42, 54, 66, 214, 67, 0]
-    line "dsh-rss-news-daily" [58, 209, 359, 237, 361, 70, 61, 224, 403, 70, 91, 283, 258, 271, 0]
-    line "opencode-loop-recover" [105, 74, 228, 63, 19, 16, 52, 6, 10, 11, 10, 43, 41, 47, 0]
-    line "oc-market-quail-zephyr-72a0" [0, 407, 22, 354, 39, 14, 15, 7, 40, 10, 8, 505, 43, 12, 0]
-    line "awesome-opencode-market" [0, 0, 0, 280, 17, 9, 17, 22, 4, 1, 7, 164, 21, 10, 0]
-    line "surfbird" [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 267, 412, 0]
-    line "surfbird-mcp" [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 276, 408, 0]
+    line "dsh-loop-recover" [43, 46, 39, 99, 329, 88, 66, 56, 27, 42, 54, 66, 214, 67, 0, 0]
+    line "dsh-rss-news-daily" [58, 209, 359, 237, 361, 70, 61, 224, 403, 70, 91, 283, 258, 271, 0, 0]
+    line "opencode-loop-recover" [105, 74, 228, 63, 19, 16, 52, 6, 10, 11, 10, 43, 41, 47, 0, 0]
+    line "oc-market-quail-zephyr-72a0" [0, 407, 22, 354, 39, 14, 15, 7, 40, 10, 8, 505, 43, 12, 0, 0]
+    line "awesome-opencode-market" [0, 0, 0, 280, 17, 9, 17, 22, 4, 1, 7, 164, 21, 10, 0, 0]
+    line "surfbird" [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 267, 412, 0, 0]
+    line "surfbird-mcp" [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 276, 408, 0, 0]
 ```
 
 ### Daily — 2026-11
@@ -61,13 +61,14 @@ xychart-beta
 | 2026-11-12 | 66 | 283 | 43 | 505 | 164 | 0 | 0 | 1,061 | 311 |
 | 2026-11-13 | 214 | 258 | 41 | 43 | 21 | 267 | 276 | 1,120 | 277 |
 | 2026-11-14 | 67 | 271 | 47 | 12 | 10 | 412 | 408 | 1,227 | 477 |
-| **2026-11-15** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 2026-11-15 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| **2026-11-16** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 
 ## Docker Hub pulls
 
 | Image | All-time pulls | 2026-11 est. | Today | Trend |
 | --- | ---: | ---: | ---: | ---: |
-| `terry2010/surfbird` | 646 | 67 | 67 | ▁▁▁▁▁▁▁▁▁▁▁▁▁▁█ |
+| `terry2010/surfbird` | 648 | 69 | 2 | ▁▁▁▁▁▁▁▁▁▁▁▁▁▁█▁ |
 
 > Docker Hub only exposes a cumulative `pull_count` — daily figures are diffs between once-a-day snapshots, so they lag ~1 day. `≈` marks days inside a missed-run gap (delta spread evenly). Same bot-wave caveat as npm: new tags get pulled by image scanners.
 
@@ -89,7 +90,8 @@ xychart-beta
 | 2026-11-12 | — | — |
 | 2026-11-13 | — | — |
 | 2026-11-14 | — | — |
-| **2026-11-15** | 67 | 67 |
+| 2026-11-15 | 67 | 67 |
+| **2026-11-16** | 2 | 2 |
 
 ## Monthly history
 
