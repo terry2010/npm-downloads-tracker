@@ -1,6 +1,6 @@
 {
   "month": "2026-11",
-  "fetchedAt": "2026-11-16T08:52:57.736Z",
+  "fetchedAt": "2026-11-16T09:00:24.221Z",
   "packages": {
     "dsh-loop-recover": {
       "2026-11-01": 43,
@@ -171,6 +171,29 @@
       "2026-11-14": 579,
       "2026-11-15": 646,
       "2026-11-16": 675
+    },
+    "terry2010/chrome-headless-chinese": {
+      "2026-11-16": 264
+    },
+    "terry2010/gojieba-api": {
+      "2026-11-16": 284
+    },
+    "terry2010/simple-chrome-spider": {
+      "2026-11-16": 268
+    }
+  },
+  "dockerMeta": {
+    "terry2010/surfbird": {
+      "registered": "2026-11-13"
+    },
+    "terry2010/chrome-headless-chinese": {
+      "registered": "2019-05-13"
+    },
+    "terry2010/gojieba-api": {
+      "registered": "2020-04-18"
+    },
+    "terry2010/simple-chrome-spider": {
+      "registered": "2025-05-21"
     }
   }
 }

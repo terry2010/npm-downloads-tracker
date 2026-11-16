@@ -1,8 +1,10 @@
 #!/usr/bin/env node
-// Fetches daily npm download counts for the packages in packages.json,
-// stores them under data/YYYY-MM.json and regenerates DASHBOARD.md.
-// Covers the previous month and the current month (through today) in one
-// range query per package, so missed runs self-heal on the next run.
+// Fetches daily npm download counts for the packages in config.json ("npm")
+// and snapshots Docker Hub pull_count for the images in config.json
+// ("docker"); stores them under data/YYYY-MM.json and regenerates
+// DASHBOARD.md. Covers the previous month and the current month (through
+// today) in one range query per package, so missed runs self-heal on the
+// next run.
 
 import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
 import { execFile } from 'node:child_process';
@@ -15,10 +17,19 @@ const execFileP = promisify(execFile);
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DATA_DIR = path.join(ROOT, 'data');
 const DASHBOARD_PATH = path.join(ROOT, 'DASHBOARD.md');
-const PACKAGES = JSON.parse(await readFile(path.join(ROOT, 'packages.json'), 'utf8'));
-const DOCKER_IMAGES = JSON.parse(
-  await readFile(path.join(ROOT, 'docker.json'), 'utf8').catch(() => '[]')
+// config.json: { "npm": [pkg, ...], "docker": [image, ...] }.
+// Falls back to the legacy packages.json / docker.json pair.
+const CONFIG = JSON.parse(
+  await readFile(path.join(ROOT, 'config.json'), 'utf8').catch(() => 'null')
 );
+const PACKAGES =
+  CONFIG?.npm ??
+  JSON.parse(await readFile(path.join(ROOT, 'packages.json'), 'utf8'));
+const DOCKER_IMAGES =
+  CONFIG?.docker ??
+  JSON.parse(
+    await readFile(path.join(ROOT, 'docker.json'), 'utf8').catch(() => '[]')
+  );
 
 const now = new Date();
 const today = now.toISOString().slice(0, 10);
@@ -92,10 +103,18 @@ async function loadMonth(ym) {
     f.month = ym;
     f.packages ??= {};
     f.docker ??= {};
+    f.dockerMeta ??= {};
     f.errors ??= {};
     return f;
   } catch {
-    return { month: ym, fetchedAt: null, packages: {}, docker: {}, errors: {} };
+    return {
+      month: ym,
+      fetchedAt: null,
+      packages: {},
+      docker: {},
+      dockerMeta: {},
+      errors: {},
+    };
   }
 }
 
@@ -165,23 +184,59 @@ function estReal(pkg, v, date) {
 
 // Docker Hub exposes only a cumulative pull_count per repo — we snapshot it
 // once per run and derive daily pulls by diffing consecutive snapshots.
-async function fetchDockerPulls(image) {
+// date_registered is kept too: a young repo's first snapshot is not a mere
+// baseline, it counts every pull since registration.
+async function fetchDockerRepo(image) {
   const body = await fetchJson(
     `https://hub.docker.com/v2/repositories/${image}/`
   );
   if (typeof body.pull_count !== 'number')
     throw new Error('unexpected response shape');
-  return body.pull_count;
+  return {
+    pulls: body.pull_count,
+    registered: body.date_registered?.slice(0, 10) ?? null,
+  };
 }
 
 const DAY_MS = 86400000;
+// Only spread a first-snapshot baseline when the repo is younger than this —
+// for old repos the lifetime pulls can't be attributed to any day.
+const BASELINE_SPREAD_MAX_DAYS = 62;
+
+// Splits `diff` over `gap` consecutive days with cumulative rounding, so the
+// parts always sum back to exactly `diff`.
+function spreadDays(startMs, gap, diff, deltas, approx = true) {
+  for (let j = 1; j <= gap; j++) {
+    const d = new Date(startMs + j * DAY_MS).toISOString().slice(0, 10);
+    deltas.set(d, {
+      v: Math.round((diff * j) / gap) - Math.round((diff * (j - 1)) / gap),
+      approx,
+    });
+  }
+}
 
 // Per-day pull deltas for an image, from the merged snapshot series across
 // all month files. Gaps (missed runs) are spread evenly and marked approx.
-function dockerDeltaMap(series) {
+// If the repo was registered recently, the first snapshot's count is spread
+// over the days since registration instead of being dropped as a baseline.
+function dockerDeltaMap(series, registered) {
   const dates = Object.keys(series).sort();
   const deltas = new Map();
-  for (let i = 1; i < dates.length; i++) {
+  let i = 1;
+  if (dates.length && registered) {
+    const reg = Date.parse(registered);
+    const first = Date.parse(dates[0]);
+    const gap = Math.round((first - reg) / DAY_MS);
+    if (gap >= 0 && gap <= BASELINE_SPREAD_MAX_DAYS) {
+      if (gap === 0) {
+        deltas.set(dates[0], { v: series[dates[0]] });
+      } else {
+        // pulls accumulated from `registered` through the first snapshot day
+        spreadDays(reg - DAY_MS, gap + 1, series[dates[0]], deltas);
+      }
+    }
+  }
+  for (; i < dates.length; i++) {
     const prev = Date.parse(dates[i - 1]);
     const cur = Date.parse(dates[i]);
     const gap = Math.round((cur - prev) / DAY_MS);
@@ -189,13 +244,7 @@ function dockerDeltaMap(series) {
     if (gap <= 1) {
       deltas.set(dates[i], { v: diff });
     } else {
-      const per = Math.round(diff / gap);
-      for (let t = prev + DAY_MS; t <= cur; t += DAY_MS) {
-        deltas.set(new Date(t).toISOString().slice(0, 10), {
-          v: per,
-          approx: true,
-        });
-      }
+      spreadDays(prev, gap, diff, deltas);
     }
   }
   return deltas;
@@ -282,6 +331,7 @@ for (const ym of FETCH_MONTHS) {
   snapshots.set(ym, {
     packages: structuredClone(f.packages),
     docker: structuredClone(f.docker ?? {}),
+    dockerMeta: structuredClone(f.dockerMeta ?? {}),
     errors: structuredClone(f.errors ?? {}),
   });
 }
@@ -329,7 +379,8 @@ for (const { pkg, rows, error } of results) {
 const dockerResults = await Promise.all(
   DOCKER_IMAGES.map(async (image) => {
     try {
-      return { image, pulls: await fetchDockerPulls(image) };
+      const { pulls, registered } = await fetchDockerRepo(image);
+      return { image, pulls, registered };
     } catch (err) {
       return { image, error: String(err?.message ?? err) };
     }
@@ -337,7 +388,7 @@ const dockerResults = await Promise.all(
 );
 {
   const file = months.get(currentYm);
-  for (const { image, pulls, error } of dockerResults) {
+  for (const { image, pulls, registered, error } of dockerResults) {
     if (error) {
       file.errors = { ...(file.errors ?? {}), [`docker:${image}`]: error };
       continue;
@@ -346,6 +397,12 @@ const dockerResults = await Promise.all(
       ...(file.docker[image] ?? {}),
       [today]: pulls,
     };
+    if (registered) {
+      (file.dockerMeta ??= {})[image] = {
+        ...(file.dockerMeta[image] ?? {}),
+        registered,
+      };
+    }
     if (file.errors) delete file.errors[`docker:${image}`];
   }
 }
@@ -357,6 +414,7 @@ for (const [ym, file] of months) {
   const changed =
     stable(snap.packages) !== stable(file.packages) ||
     stable(snap.docker ?? {}) !== stable(file.docker ?? {}) ||
+    stable(snap.dockerMeta ?? {}) !== stable(file.dockerMeta ?? {}) ||
     stable(snap.errors ?? {}) !== stable(file.errors ?? {});
   if (!changed && file.fetchedAt) continue;
   file.fetchedAt = fetchedAt;
@@ -380,14 +438,18 @@ allMonths.sort((a, b) => a.month.localeCompare(b.month));
 
 // Merged cumulative pull_count series per image across all month files.
 const dSeries = {};
+const dMeta = {};
 const dDeltas = {};
 for (const m of allMonths) {
   for (const [im, map] of Object.entries(m.docker ?? {})) {
     Object.assign((dSeries[im] ??= {}), map);
   }
+  for (const [im, meta] of Object.entries(m.dockerMeta ?? {})) {
+    dMeta[im] = { ...(dMeta[im] ?? {}), ...meta };
+  }
 }
 for (const im of DOCKER_IMAGES) {
-  dDeltas[im] = dockerDeltaMap(dSeries[im] ?? {});
+  dDeltas[im] = dockerDeltaMap(dSeries[im] ?? {}, dMeta[im]?.registered);
 }
 
 function dockerDailyRows(m, days) {
@@ -523,7 +585,7 @@ if (!cur) {
       ''
     );
     L.push(
-      '> Docker Hub only exposes a cumulative `pull_count` — daily figures are diffs between once-a-day snapshots, so they lag ~1 day. `≈` marks days inside a missed-run gap (delta spread evenly). Same bot-wave caveat as npm: new tags get pulled by image scanners.',
+      '> Docker Hub only exposes a cumulative `pull_count` — daily figures are diffs between once-a-day snapshots, so they lag ~1 day. `≈` marks days inside a missed-run gap or a new repo\u2019s pre-tracking baseline (delta spread evenly). Same bot-wave caveat as npm: new tags get pulled by image scanners.',
       ''
     );
     L.push(
