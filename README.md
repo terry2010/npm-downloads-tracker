@@ -17,9 +17,6 @@ Dashboard: [DASHBOARD.md](DASHBOARD.md)
 Watched Docker Hub images:
 
 - `terry2010/surfbird`
-- `terry2010/chrome-headless-chinese`
-- `terry2010/gojieba-api`
-- `terry2010/simple-chrome-spider`
 
 To change the watchlists, edit `config.json`:
 

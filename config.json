@@ -11,9 +11,6 @@
     "opencode-control-surfbird-for-kitesurf"
   ],
   "docker": [
-    "terry2010/surfbird",
-    "terry2010/chrome-headless-chinese",
-    "terry2010/gojieba-api",
-    "terry2010/simple-chrome-spider"
+    "terry2010/surfbird"
   ]
 }

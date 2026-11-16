@@ -76,32 +76,29 @@ xychart-beta
 | Image | All-time pulls | 2026-11 est. | Today | Trend |
 | --- | ---: | ---: | ---: | ---: |
 | `terry2010/surfbird` | 675 | 675 | 29 | ▁▁▁▁▁▁▁▁▁▁▁▁██▂▁ |
-| `terry2010/chrome-headless-chinese` | 264 | — | — | ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁ |
-| `terry2010/gojieba-api` | 284 | — | — | ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁ |
-| `terry2010/simple-chrome-spider` | 268 | — | — | ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁ |
 
 > Docker Hub only exposes a cumulative `pull_count` — daily figures are diffs between once-a-day snapshots, so they lag ~1 day. `≈` marks days inside a missed-run gap or a new repo’s pre-tracking baseline (delta spread evenly). Same bot-wave caveat as npm: new tags get pulled by image scanners.
 
 ### Daily pulls — 2026-11
 
-| Date | `terry2010/surfbird` | `terry2010/chrome-headless-chinese` | `terry2010/gojieba-api` | `terry2010/simple-chrome-spider` | Total |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| 2026-11-01 | — | — | — | — | — |
-| 2026-11-02 | — | — | — | — | — |
-| 2026-11-03 | — | — | — | — | — |
-| 2026-11-04 | — | — | — | — | — |
-| 2026-11-05 | — | — | — | — | — |
-| 2026-11-06 | — | — | — | — | — |
-| 2026-11-07 | — | — | — | — | — |
-| 2026-11-08 | — | — | — | — | — |
-| 2026-11-09 | — | — | — | — | — |
-| 2026-11-10 | — | — | — | — | — |
-| 2026-11-11 | — | — | — | — | — |
-| 2026-11-12 | — | — | — | — | — |
-| 2026-11-13 | ≈290 | — | — | — | 290 |
-| 2026-11-14 | ≈289 | — | — | — | 289 |
-| 2026-11-15 | 67 | — | — | — | 67 |
-| **2026-11-16** | 29 | — | — | — | 29 |
+| Date | `terry2010/surfbird` | Total |
+| --- | ---: | ---: |
+| 2026-11-01 | — | — |
+| 2026-11-02 | — | — |
+| 2026-11-03 | — | — |
+| 2026-11-04 | — | — |
+| 2026-11-05 | — | — |
+| 2026-11-06 | — | — |
+| 2026-11-07 | — | — |
+| 2026-11-08 | — | — |
+| 2026-11-09 | — | — |
+| 2026-11-10 | — | — |
+| 2026-11-11 | — | — |
+| 2026-11-12 | — | — |
+| 2026-11-13 | ≈290 | 290 |
+| 2026-11-14 | ≈289 | 289 |
+| 2026-11-15 | 67 | 67 |
+| **2026-11-16** | 29 | 29 |
 
 ## Monthly history
 
