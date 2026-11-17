@@ -3,7 +3,7 @@
 Daily download counts for watched npm packages, fetched daily at 16:10 UTC (00:10 Beijing time) by GitHub Actions.
 Days roll over at midnight Beijing time (UTC+8); npm per-day counts are UTC-day buckets, so the "today" row may stay 0 until the UTC day starts.
 
-_Last updated: 2026-11-17 12:17 UTC_
+_Last updated: 2026-11-17 16:11 UTC_
 
 ## Watched packages
 
@@ -22,16 +22,16 @@ _Last updated: 2026-11-17 12:17 UTC_
 
 | Package | Total | Est. real | Avg/day | Peak | Today | Trend |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| `dsh-loop-recover` | 1,348 | 898 | 79.3 | 329 · 11-05 | 0 | ▂▂▁▃█▃▂▂▁▂▂▂▆▂▂▂▁ |
-| `dsh-rss-news-daily` | 3,251 | 1,301 | 191.2 | 403 · 11-09 | 0 | ▂▅█▅█▂▂▅█▂▂▆▆▆▂▅▁ |
-| `opencode-loop-recover` | 1,012 | 712 | 59.5 | 228 · 11-03 | 0 | ▄▃█▃▁▁▂▁▁▁▁▂▂▂▇▄▁ |
-| `oc-market-quail-zephyr-72a0` | 1,493 | 336 | 87.8 | 505 · 11-12 | 0 | ▁▇▁▆▁▁▁▁▁▁▁█▁▁▁▁▁ |
-| `awesome-opencode-market` | 577 | 147 | 33.9 | 280 · 11-04 | 0 | ▁▁▁█▁▁▁▁▁▁▁▅▁▁▁▁▁ |
-| `surfbird` | 714 | 147 | 42.0 | 412 · 11-14 | 0 | ▁▁▁▁▁▁▁▁▁▁▁▁▆█▁▁▁ |
-| `surfbird-mcp` | 735 | 159 | 43.2 | 408 · 11-14 | 0 | ▁▁▁▁▁▁▁▁▁▁▁▁▆█▁▁▁ |
-| `dsh-control-surfbird-for-kitesurf` | 1,248 | 198 | 73.4 | 1,209 · 11-15 | 0 | ▁▁▁▁▁▁▁▁▁▁▁▁▁▁█▁▁ |
-| `opencode-control-surfbird-for-kitesurf` | 697 | 97 | 41.0 | 387 · 11-16 | 0 | ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▇█▁ |
-| `pi-control-surfbird-for-kitesurf` | 238 | 0 | 14.0 | 238 · 11-16 | 0 | ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁█▁ |
+| `dsh-loop-recover` | 1,348 | 898 | 74.9 | 329 · 11-05 | 0 | ▂▂▁▃█▃▂▂▁▂▂▂▆▂▂▂▁▁ |
+| `dsh-rss-news-daily` | 3,251 | 1,301 | 180.6 | 403 · 11-09 | 0 | ▂▅█▅█▂▂▅█▂▂▆▆▆▂▅▁▁ |
+| `opencode-loop-recover` | 1,012 | 712 | 56.2 | 228 · 11-03 | 0 | ▄▃█▃▁▁▂▁▁▁▁▂▂▂▇▄▁▁ |
+| `oc-market-quail-zephyr-72a0` | 1,493 | 336 | 82.9 | 505 · 11-12 | 0 | ▁▇▁▆▁▁▁▁▁▁▁█▁▁▁▁▁▁ |
+| `awesome-opencode-market` | 577 | 147 | 32.1 | 280 · 11-04 | 0 | ▁▁▁█▁▁▁▁▁▁▁▅▁▁▁▁▁▁ |
+| `surfbird` | 714 | 147 | 39.7 | 412 · 11-14 | 0 | ▁▁▁▁▁▁▁▁▁▁▁▁▆█▁▁▁▁ |
+| `surfbird-mcp` | 735 | 159 | 40.8 | 408 · 11-14 | 0 | ▁▁▁▁▁▁▁▁▁▁▁▁▆█▁▁▁▁ |
+| `dsh-control-surfbird-for-kitesurf` | 1,248 | 198 | 69.3 | 1,209 · 11-15 | 0 | ▁▁▁▁▁▁▁▁▁▁▁▁▁▁█▁▁▁ |
+| `opencode-control-surfbird-for-kitesurf` | 697 | 97 | 38.7 | 387 · 11-16 | 0 | ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▇█▁▁ |
+| `pi-control-surfbird-for-kitesurf` | 238 | 0 | 13.2 | 238 · 11-16 | 0 | ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁█▁▁ |
 
 > `Est. real` subtracts ~150 automated downloads per version published that day — every `npm publish` triggers a scanner/mirror fetch wave. It's an upper bound on organic installs (ambient crawlers and CI can't be separated).
 
@@ -39,18 +39,18 @@ _Last updated: 2026-11-17 12:17 UTC_
 %%{init: {'xyChart': {'width': 960, 'height': 320}}}%%
 xychart-beta
     title "Daily downloads - 2026-11"
-    x-axis ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17"]
+    x-axis ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18"]
     y-axis "downloads" 0 --> 2000
-    line "dsh-loop-recover" [43, 46, 39, 99, 329, 88, 66, 56, 27, 42, 54, 66, 214, 67, 53, 59, 0]
-    line "dsh-rss-news-daily" [58, 209, 359, 237, 361, 70, 61, 224, 403, 70, 91, 283, 258, 271, 84, 212, 0]
-    line "opencode-loop-recover" [105, 74, 228, 63, 19, 16, 52, 6, 10, 11, 10, 43, 41, 47, 187, 100, 0]
-    line "oc-market-quail-zephyr-72a0" [0, 407, 22, 354, 39, 14, 15, 7, 40, 10, 8, 505, 43, 12, 11, 6, 0]
-    line "awesome-opencode-market" [0, 0, 0, 280, 17, 9, 17, 22, 4, 1, 7, 164, 21, 10, 15, 10, 0]
-    line "surfbird" [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 267, 412, 16, 19, 0]
-    line "surfbird-mcp" [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 276, 408, 28, 23, 0]
-    line "dsh-control-surfbird-for-kitesurf" [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1209, 39, 0]
-    line "opencode-control-surfbird-for-kitesurf" [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 310, 387, 0]
-    line "pi-control-surfbird-for-kitesurf" [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 238, 0]
+    line "dsh-loop-recover" [43, 46, 39, 99, 329, 88, 66, 56, 27, 42, 54, 66, 214, 67, 53, 59, 0, 0]
+    line "dsh-rss-news-daily" [58, 209, 359, 237, 361, 70, 61, 224, 403, 70, 91, 283, 258, 271, 84, 212, 0, 0]
+    line "opencode-loop-recover" [105, 74, 228, 63, 19, 16, 52, 6, 10, 11, 10, 43, 41, 47, 187, 100, 0, 0]
+    line "oc-market-quail-zephyr-72a0" [0, 407, 22, 354, 39, 14, 15, 7, 40, 10, 8, 505, 43, 12, 11, 6, 0, 0]
+    line "awesome-opencode-market" [0, 0, 0, 280, 17, 9, 17, 22, 4, 1, 7, 164, 21, 10, 15, 10, 0, 0]
+    line "surfbird" [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 267, 412, 16, 19, 0, 0]
+    line "surfbird-mcp" [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 276, 408, 28, 23, 0, 0]
+    line "dsh-control-surfbird-for-kitesurf" [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1209, 39, 0, 0]
+    line "opencode-control-surfbird-for-kitesurf" [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 310, 387, 0, 0]
+    line "pi-control-surfbird-for-kitesurf" [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 238, 0, 0]
 ```
 
 ### Daily — 2026-11
@@ -73,13 +73,14 @@ xychart-beta
 | 2026-11-14 | 67 | 271 | 47 | 12 | 10 | 412 | 408 | 0 | 0 | 0 | 1,227 | 477 |
 | 2026-11-15 | 53 | 84 | 187 | 11 | 15 | 16 | 28 | 1,209 | 310 | 0 | 1,913 | 413 |
 | 2026-11-16 | 59 | 212 | 100 | 6 | 10 | 19 | 23 | 39 | 387 | 238 | 1,093 | 405 |
-| **2026-11-17** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 2026-11-17 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| **2026-11-18** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 
 ## Docker Hub pulls
 
 | Image | All-time pulls | 2026-11 est. | Today | Trend |
 | --- | ---: | ---: | ---: | ---: |
-| `terry2010/surfbird` | 687 | 687 | 12 | ▁▁▁▁▁▁▁▁▁▁▁▁██▂▁▁ |
+| `terry2010/surfbird` | 687 | 687 | 0 | ▁▁▁▁▁▁▁▁▁▁▁▁██▂▁▁▁ |
 
 > Docker Hub only exposes a cumulative `pull_count` — daily figures are diffs between once-a-day snapshots, so they lag ~1 day. `≈` marks days inside a missed-run gap or a new repo’s pre-tracking baseline (delta spread evenly). Same bot-wave caveat as npm: new tags get pulled by image scanners.
 
@@ -103,7 +104,8 @@ xychart-beta
 | 2026-11-14 | ≈289 | 289 |
 | 2026-11-15 | 67 | 67 |
 | 2026-11-16 | 29 | 29 |
-| **2026-11-17** | 12 | 12 |
+| 2026-11-17 | 12 | 12 |
+| **2026-11-18** | 0 | 0 |
 
 ## Monthly history
 
