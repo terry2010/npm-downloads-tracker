@@ -2,6 +2,8 @@
   "npm": [
     "dsh-loop-recover",
     "dsh-rss-news-daily",
+    "dsh-rss-news-flash-kuaixun",
+    "dsh-rss-news-browser-fetch",
     "opencode-loop-recover",
     "oc-market-quail-zephyr-72a0",
     "awesome-opencode-market",

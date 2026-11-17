@@ -1,6 +1,6 @@
 {
   "month": "2026-11",
-  "fetchedAt": "2026-11-17T16:11:44.720Z",
+  "fetchedAt": "2026-11-17T18:12:06.598Z",
   "packages": {
     "dsh-loop-recover": {
       "2026-11-01": 43,
@@ -193,7 +193,10 @@
       "2026-11-17": 0
     }
   },
-  "errors": {},
+  "errors": {
+    "dsh-rss-news-flash-kuaixun": "HTTP 404",
+    "dsh-rss-news-browser-fetch": "HTTP 404"
+  },
   "docker": {
     "terry2010/surfbird": {
       "2026-11-14": 579,
