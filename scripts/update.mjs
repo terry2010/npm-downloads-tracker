@@ -54,8 +54,6 @@ const BOT_PER_PUBLISH = 150;
 
 const nf = new Intl.NumberFormat('en-US');
 const BARS = '▁▂▃▄▅▆▇█';
-const dHeaders = ['Date', ...PACKAGES.map((p) => `\`${p}\``), 'Total', 'Est. real'];
-const dockerHeaders = ['Date', ...DOCKER_IMAGES.map((i) => `\`${i}\``), 'Total'];
 
 function lastDayOf(ym) {
   const [y, m] = ym.split('-').map(Number);
@@ -269,27 +267,40 @@ function monthTotal(file, pkg) {
   return Object.values(map).reduce((a, b) => a + b, 0);
 }
 
-function dailyRows(file, days, boldToday = false) {
-  return days.map((date) => {
-    const cells = [boldToday && date === today ? `**${date}**` : date];
+// Daily tables are transposed: one row per package, one column per day,
+// newest day leftmost. Total / Est. real become summary rows.
+function dailyTable(file, days, boldToday = false) {
+  const desc = [...days].reverse();
+  const headers = [
+    'Package',
+    ...desc.map((d) => (boldToday && d === today ? `**${d}**` : d)),
+  ];
+  const rows = PACKAGES.map((pkg) => {
+    const map = file?.packages?.[pkg];
+    const bad = !map || file?.errors?.[pkg];
+    return [
+      `\`${pkg}\``,
+      ...desc.map((d) => (bad ? '—' : fmt(map[d] ?? 0))),
+    ];
+  });
+  const totals = ['**Total**'];
+  const ests = ['Est. real'];
+  for (const d of desc) {
     let total = 0;
     let est = 0;
     let any = false;
     for (const pkg of PACKAGES) {
       const map = file?.packages?.[pkg];
-      if (!map || file?.errors?.[pkg]) {
-        cells.push('—');
-        continue;
-      }
-      const v = map[date] ?? 0;
+      if (!map || file?.errors?.[pkg]) continue;
+      const v = map[d] ?? 0;
       total += v;
-      est += estReal(pkg, v, date);
+      est += estReal(pkg, v, d);
       any = true;
-      cells.push(fmt(v));
     }
-    cells.push(fmt(total), any ? fmt(est) : '—');
-    return cells;
-  });
+    totals.push(fmt(total));
+    ests.push(any ? fmt(est) : '—');
+  }
+  return mdTable(headers, [...rows, totals, ests]);
 }
 
 function niceCeil(v) {
@@ -459,24 +470,33 @@ for (const im of DOCKER_IMAGES) {
   dDeltas[im] = dockerDeltaMap(dSeries[im] ?? {}, dMeta[im]?.registered);
 }
 
-function dockerDailyRows(m, days) {
-  return days.map((date) => {
-    const cells = [date === today ? `**${date}**` : date];
+function dockerDailyTable(m, days) {
+  const desc = [...days].reverse();
+  const headers = [
+    'Image',
+    ...desc.map((d) => (d === today ? `**${d}**` : d)),
+  ];
+  const rows = DOCKER_IMAGES.map((im) => [
+    `\`${im}\``,
+    ...desc.map((d) => {
+      const dd = dDeltas[im].get(d);
+      if (!dd || m.errors?.[`docker:${im}`]) return '—';
+      return (dd.approx ? '≈' : '') + fmt(dd.v);
+    }),
+  ]);
+  const totals = ['**Total**'];
+  for (const d of desc) {
     let total = 0;
     let any = false;
     for (const im of DOCKER_IMAGES) {
-      const d = dDeltas[im].get(date);
-      if (!d || m.errors?.[`docker:${im}`]) {
-        cells.push('—');
-        continue;
-      }
-      total += d.v;
+      const dd = dDeltas[im].get(d);
+      if (!dd || m.errors?.[`docker:${im}`]) continue;
+      total += dd.v;
       any = true;
-      cells.push((d.approx ? '≈' : '') + fmt(d.v));
     }
-    cells.push(any ? fmt(total) : '—');
-    return cells;
-  });
+    totals.push(any ? fmt(total) : '—');
+  }
+  return mdTable(headers, [...rows, totals]);
 }
 
 const L = [];
@@ -560,7 +580,7 @@ if (!cur) {
   const mm = renderMermaid(cur, days);
   if (mm) L.push(mm, '');
 
-  L.push(`### Daily — ${currentYm}`, '', ...mdTable(dHeaders, dailyRows(cur, days, true)), '');
+  L.push(`### Daily — ${currentYm}`, '', ...dailyTable(cur, days, true), '');
 
   if (DOCKER_IMAGES.length) {
     L.push('## Docker Hub pulls', '');
@@ -599,7 +619,7 @@ if (!cur) {
     L.push(
       `### Daily pulls — ${currentYm}`,
       '',
-      ...mdTable(dockerHeaders, dockerDailyRows(cur, days)),
+      ...dockerDailyTable(cur, days),
       ''
     );
   }
@@ -642,13 +662,13 @@ for (const m of past) {
     `<summary>Daily downloads — ${m.month}</summary>`,
     '',
     ...(mm ? [mm, ''] : []),
-    ...mdTable(dHeaders, dailyRows(m, mDays)),
+    ...dailyTable(m, mDays),
     '',
     ...(hasDocker
       ? [
           '#### Docker Hub pulls',
           '',
-          ...mdTable(dockerHeaders, dockerDailyRows(m, mDays)),
+          ...dockerDailyTable(m, mDays),
           '',
         ]
       : []),
