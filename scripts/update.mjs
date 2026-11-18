@@ -107,6 +107,7 @@ async function loadMonth(ym) {
     const f = JSON.parse(await readFile(path.join(DATA_DIR, `${ym}.json`), 'utf8'));
     f.month = ym;
     f.packages ??= {};
+    f.mirror ??= {};
     f.docker ??= {};
     f.dockerMeta ??= {};
     f.errors ??= {};
@@ -116,6 +117,7 @@ async function loadMonth(ym) {
       month: ym,
       fetchedAt: null,
       packages: {},
+      mirror: {},
       docker: {},
       dockerMeta: {},
       errors: {},
@@ -162,11 +164,35 @@ async function fetchJson(url) {
   }
 }
 
-async function fetchRange(pkg) {
-  const url = `https://api.npmjs.org/downloads/range/${rangeStart}:${utcToday}/${pkg}`;
+// registry.npmmirror.com implements the same downloads API as
+// api.npmjs.org — an independent stream counting requests served by the
+// China mirror. Its `range` response only lists days with non-zero
+// downloads, so mirror maps stay sparse (missing day = 0).
+const MIRROR_HOST = 'https://registry.npmmirror.com';
+
+async function fetchRange(pkg, host = 'https://api.npmjs.org') {
+  const url = `${host}/downloads/range/${rangeStart}:${utcToday}/${pkg}`;
   const body = await fetchJson(url);
   if (!Array.isArray(body.downloads)) throw new Error('unexpected response shape');
   return body.downloads;
+}
+
+// Mirror tracking exists for a package/month once a fetch succeeded
+// (mirror[pkg] set) or failed (errors['mirror:pkg'] branch shown as '—').
+function mirrorKnown(file, pkg) {
+  return !!(file?.mirror?.[pkg] || file?.errors?.[`mirror:${pkg}`]);
+}
+function mirrorBad(file, pkg) {
+  return !!file?.errors?.[`mirror:${pkg}`];
+}
+// Renders "npm/mirror" download text. Either side may be '—' when its
+// source has no data; falls back to the plain npm figure for months
+// predating mirror tracking.
+function dual(file, pkg, npmTxt, mirrorTxt) {
+  if (!mirrorKnown(file, pkg)) return npmTxt;
+  const n = npmTxt ?? '—';
+  const m = mirrorBad(file, pkg) ? '—' : (mirrorTxt ?? '—');
+  return n === '—' && m === '—' ? '—' : `${n}/${m}`;
 }
 
 // Counts how many versions were published each UTC day, from the
@@ -277,10 +303,16 @@ function dailyTable(file, days, boldToday = false) {
   ];
   const rows = PACKAGES.map((pkg) => {
     const map = file?.packages?.[pkg];
-    const bad = !map || file?.errors?.[pkg];
+    const mmap = file?.mirror?.[pkg];
+    const nBad = !map || file?.errors?.[pkg];
     return [
       `\`${pkg}\``,
-      ...desc.map((d) => (bad ? '—' : fmt(map[d] ?? 0))),
+      ...desc.map((d) => {
+        const n = nBad ? '—' : fmt(map[d] ?? 0);
+        if (!mirrorKnown(file, pkg)) return n;
+        const m = mirrorBad(file, pkg) ? '—' : fmt(mmap?.[d] ?? 0);
+        return n === '—' && m === '—' ? '—' : `${n}/${m}`;
+      }),
     ];
   });
   const totals = ['**Total**'];
@@ -289,15 +321,33 @@ function dailyTable(file, days, boldToday = false) {
     let total = 0;
     let est = 0;
     let any = false;
+    let mSum = 0;
+    let mKnownAny = false;
+    let mOkAny = false;
     for (const pkg of PACKAGES) {
       const map = file?.packages?.[pkg];
-      if (!map || file?.errors?.[pkg]) continue;
-      const v = map[d] ?? 0;
-      total += v;
-      est += estReal(pkg, v, d);
-      any = true;
+      const nBad = !map || file?.errors?.[pkg];
+      if (!nBad) {
+        const v = map[d] ?? 0;
+        total += v;
+        est += estReal(pkg, v, d);
+        any = true;
+      }
+      if (mirrorKnown(file, pkg)) {
+        mKnownAny = true;
+        if (!mirrorBad(file, pkg)) {
+          mSum += file.mirror[pkg][d] ?? 0;
+          mOkAny = true;
+        }
+      }
     }
-    totals.push(fmt(total));
+    totals.push(
+      any
+        ? mKnownAny
+          ? `${fmt(total)}/${mOkAny ? fmt(mSum) : '—'}`
+          : fmt(total)
+        : '—'
+    );
     ests.push(any ? fmt(est) : '—');
   }
   return mdTable(headers, [...rows, totals, ests]);
@@ -348,6 +398,7 @@ for (const ym of FETCH_MONTHS) {
   months.set(ym, f);
   snapshots.set(ym, {
     packages: structuredClone(f.packages),
+    mirror: structuredClone(f.mirror ?? {}),
     docker: structuredClone(f.docker ?? {}),
     dockerMeta: structuredClone(f.dockerMeta ?? {}),
     errors: structuredClone(f.errors ?? {}),
@@ -394,6 +445,32 @@ for (const { pkg, rows, error } of results) {
   }
 }
 
+const mirrorResults = await Promise.all(
+  PACKAGES.map(async (pkg) => {
+    try {
+      return { pkg, rows: await fetchRange(pkg, MIRROR_HOST) };
+    } catch (err) {
+      return { pkg, error: String(err?.message ?? err) };
+    }
+  })
+);
+
+for (const { pkg, rows, error } of mirrorResults) {
+  for (const ym of FETCH_MONTHS) {
+    const file = months.get(ym);
+    if (error) {
+      file.errors = { ...(file.errors ?? {}), [`mirror:${pkg}`]: error };
+      continue;
+    }
+    const map = {};
+    for (const d of rows) {
+      if (d.day.startsWith(ym)) map[d.day] = d.downloads;
+    }
+    file.mirror[pkg] = map;
+    if (file.errors) delete file.errors[`mirror:${pkg}`];
+  }
+}
+
 const dockerResults = await Promise.all(
   DOCKER_IMAGES.map(async (image) => {
     try {
@@ -431,6 +508,7 @@ for (const [ym, file] of months) {
   const snap = snapshots.get(ym);
   const changed =
     stable(snap.packages) !== stable(file.packages) ||
+    stable(snap.mirror ?? {}) !== stable(file.mirror ?? {}) ||
     stable(snap.docker ?? {}) !== stable(file.docker ?? {}) ||
     stable(snap.dockerMeta ?? {}) !== stable(file.dockerMeta ?? {}) ||
     stable(snap.errors ?? {}) !== stable(file.errors ?? {});
@@ -504,6 +582,7 @@ L.push('# NPM Downloads Tracker', '');
 L.push(
   'Daily download counts for watched npm packages, fetched daily at 16:10 UTC (00:10 Beijing time) by GitHub Actions.',
   'Days roll over at midnight Beijing time (UTC+8); npm per-day counts are UTC-day buckets, so the "today" row may stay 0 until the UTC day starts.',
+  'Download cells show `npm/npmmirror` — official registry.npmjs.org on the left, China mirror registry.npmmirror.com (taobao source) on the right; `—` means that source has no data. Charts, Avg/day, Peak, Trend and Est. real use npm counts only.',
   ''
 );
 
@@ -536,30 +615,49 @@ if (!cur) {
   const sumRows = [];
   for (const pkg of PACKAGES) {
     const map = cur.packages?.[pkg];
+    const nBad = !map || cur.errors?.[pkg];
+    const mmap = cur.mirror?.[pkg];
     const name = `\`${pkg}\``;
-    if (!map || cur.errors?.[pkg]) {
+    if (nBad && !mirrorKnown(cur, pkg)) {
       sumRows.push([name, '—', '—', '—', '—', '—', '—']);
       continue;
     }
-    const vals = days.map((d) => map[d] ?? 0);
-    const total = vals.reduce((a, b) => a + b, 0);
-    const estTotal = vals.reduce((a, v, i) => a + estReal(pkg, v, days[i]), 0);
+    const vals = nBad ? null : days.map((d) => map[d] ?? 0);
+    const mVals =
+      mirrorKnown(cur, pkg) && !mirrorBad(cur, pkg)
+        ? days.map((d) => mmap[d] ?? 0)
+        : null;
+    const total = vals ? vals.reduce((a, b) => a + b, 0) : null;
+    const estTotal = vals
+      ? vals.reduce((a, v, i) => a + estReal(pkg, v, days[i]), 0)
+      : null;
     let peak = 0;
     let peakDay = '';
-    vals.forEach((v, i) => {
+    vals?.forEach((v, i) => {
       if (v > peak) {
         peak = v;
         peakDay = days[i];
       }
     });
+    const mTotal = mVals ? mVals.reduce((a, b) => a + b, 0) : null;
     sumRows.push([
       name,
-      fmt(total),
-      fmt(estTotal),
-      (total / days.length).toFixed(1),
-      `${fmt(peak)} · ${peakDay.slice(5)}`,
-      fmt(vals[vals.length - 1] ?? 0),
-      sparkline(vals),
+      dual(
+        cur,
+        pkg,
+        total === null ? null : fmt(total),
+        mTotal === null ? null : fmt(mTotal)
+      ),
+      estTotal === null ? '—' : fmt(estTotal),
+      total === null ? '—' : (total / days.length).toFixed(1),
+      total === null ? '—' : `${fmt(peak)} · ${peakDay.slice(5)}`,
+      dual(
+        cur,
+        pkg,
+        vals ? fmt(vals[vals.length - 1] ?? 0) : null,
+        mVals ? fmt(mVals[mVals.length - 1] ?? 0) : null
+      ),
+      vals ? sparkline(vals) : '—',
     ]);
   }
   L.push(...mdTable(sumHeaders, sumRows), '');
@@ -631,19 +729,38 @@ const hRows = allMonths.map((m) => {
   const cells = [m.month === currentYm ? `${m.month} (MTD)` : m.month];
   let grand = 0;
   let est = 0;
+  let mGrand = 0;
+  let mKnownAny = false;
+  let mOkAny = false;
   for (const pkg of PACKAGES) {
     const t = monthTotal(m, pkg);
+    const mmap = m.mirror?.[pkg];
+    const mK = mirrorKnown(m, pkg);
+    const mt =
+      mK && !mirrorBad(m, pkg)
+        ? Object.values(mmap).reduce((a, b) => a + b, 0)
+        : null;
+    if (mK) {
+      mKnownAny = true;
+      if (mt !== null) {
+        mGrand += mt;
+        mOkAny = true;
+      }
+    }
     if (t === null) {
-      cells.push('—');
+      cells.push(mK ? (mt === null ? '—' : `—/${fmt(mt)}`) : '—');
       continue;
     }
     grand += t;
     for (const [d, v] of Object.entries(m.packages[pkg])) {
       est += estReal(pkg, v, d);
     }
-    cells.push(fmt(t));
+    cells.push(mK ? `${fmt(t)}/${mt === null ? '—' : fmt(mt)}` : fmt(t));
   }
-  cells.push(fmt(grand), fmt(est));
+  cells.push(
+    mKnownAny ? `${fmt(grand)}/${mOkAny ? fmt(mGrand) : '—'}` : fmt(grand),
+    fmt(est)
+  );
   return cells;
 });
 L.push(...mdTable(hHeaders, hRows), '');
@@ -681,7 +798,7 @@ L.push('---', '', '_Generated by `scripts/update.mjs` — raw data in `data/`_')
 await writeFile(DASHBOARD_PATH, L.join('\n') + '\n');
 
 console.log(
-  `fetched ${results.filter((r) => !r.error).length}/${PACKAGES.length} packages` +
+  `fetched ${results.filter((r) => !r.error).length}/${PACKAGES.length} packages (+${mirrorResults.filter((r) => !r.error).length} mirror)` +
     (DOCKER_IMAGES.length
       ? ` + ${dockerResults.filter((r) => !r.error).length}/${DOCKER_IMAGES.length} docker images`
       : '') +
@@ -691,6 +808,9 @@ console.log(
 );
 for (const r of results.filter((r) => r.error)) {
   console.error(`  ! ${r.pkg}: ${r.error}`);
+}
+for (const r of mirrorResults.filter((r) => r.error)) {
+  console.error(`  ! mirror:${r.pkg}: ${r.error}`);
 }
 for (const r of dockerResults.filter((r) => r.error)) {
   console.error(`  ! docker:${r.image}: ${r.error}`);

@@ -1,6 +1,6 @@
 {
   "month": "2026-10",
-  "fetchedAt": "2026-11-18T12:20:10.577Z",
+  "fetchedAt": "2026-11-18T13:15:47.524Z",
   "packages": {
     "dsh-loop-recover": {
       "2026-10-01": 0,
@@ -401,5 +401,31 @@
   },
   "errors": {},
   "docker": {},
-  "dockerMeta": {}
+  "dockerMeta": {},
+  "mirror": {
+    "dsh-loop-recover": {
+      "2026-10-28": 45,
+      "2026-10-29": 8,
+      "2026-10-30": 29,
+      "2026-10-31": 35
+    },
+    "dsh-rss-news-daily": {
+      "2026-10-28": 65,
+      "2026-10-29": 9,
+      "2026-10-30": 19,
+      "2026-10-31": 26
+    },
+    "dsh-rss-news-flash-kuaixun": {},
+    "dsh-rss-news-browser-fetch": {},
+    "opencode-loop-recover": {
+      "2026-10-31": 33
+    },
+    "oc-market-quail-zephyr-72a0": {},
+    "awesome-opencode-market": {},
+    "surfbird": {},
+    "surfbird-mcp": {},
+    "dsh-control-surfbird-for-kitesurf": {},
+    "opencode-control-surfbird-for-kitesurf": {},
+    "pi-control-surfbird-for-kitesurf": {}
+  }
 }
