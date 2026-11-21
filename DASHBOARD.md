@@ -4,7 +4,7 @@ Daily download counts for watched npm packages, fetched daily at 16:10 UTC (00:1
 Days roll over at midnight Beijing time (UTC+8); npm per-day counts are UTC-day buckets, so the "today" row may stay 0 until the UTC day starts.
 Download cells show `npm/npmmirror` — official registry.npmjs.org on the left, China mirror registry.npmmirror.com (taobao source) on the right; `—` means that source has no data. Charts, Avg/day, Peak, Trend and Est. real use npm counts only.
 
-_Last updated: 2026-11-21 17:16 UTC_
+_Last updated: 2026-11-21 21:38 UTC_
 
 ## Watched packages
 
@@ -83,7 +83,7 @@ xychart-beta
 
 | Image | All-time pulls | 2026-11 est. | Today | Trend |
 | --- | ---: | ---: | ---: | ---: |
-| `terry2010/surfbird` | 925 | 925 | 34 | ▁▁▁▁▁▁▁▁▁▁▁▁██▂▁▁▁▁▆▁▁ |
+| `terry2010/surfbird` | 940 | 940 | 49 | ▁▁▁▁▁▁▁▁▁▁▁▁██▂▁▁▁▁▆▁▂ |
 
 > Docker Hub only exposes a cumulative `pull_count` — daily figures are diffs between once-a-day snapshots, so they lag ~1 day. `≈` marks days inside a missed-run gap or a new repo’s pre-tracking baseline (delta spread evenly). Same bot-wave caveat as npm: new tags get pulled by image scanners.
 
@@ -91,8 +91,8 @@ xychart-beta
 
 | Image | **2026-11-22** | 2026-11-21 | 2026-11-20 | 2026-11-19 | 2026-11-18 | 2026-11-17 | 2026-11-16 | 2026-11-15 | 2026-11-14 | 2026-11-13 | 2026-11-12 | 2026-11-11 | 2026-11-10 | 2026-11-09 | 2026-11-08 | 2026-11-07 | 2026-11-06 | 2026-11-05 | 2026-11-04 | 2026-11-03 | 2026-11-02 | 2026-11-01 |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| `terry2010/surfbird` | 34 | 16 | 183 | 1 | 4 | 12 | 29 | 67 | ≈289 | ≈290 | — | — | — | — | — | — | — | — | — | — | — | — |
-| **Total** | 34 | 16 | 183 | 1 | 4 | 12 | 29 | 67 | 289 | 290 | — | — | — | — | — | — | — | — | — | — | — | — |
+| `terry2010/surfbird` | 49 | 16 | 183 | 1 | 4 | 12 | 29 | 67 | ≈289 | ≈290 | — | — | — | — | — | — | — | — | — | — | — | — |
+| **Total** | 49 | 16 | 183 | 1 | 4 | 12 | 29 | 67 | 289 | 290 | — | — | — | — | — | — | — | — | — | — | — | — |
 
 ## Monthly history
 
