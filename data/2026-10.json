@@ -1,6 +1,6 @@
 {
   "month": "2026-10",
-  "fetchedAt": "2026-11-18T13:15:47.524Z",
+  "fetchedAt": "2026-11-23T18:00:29.815Z",
   "packages": {
     "dsh-loop-recover": {
       "2026-10-01": 0,
@@ -399,7 +399,9 @@
       "2026-10-31": 0
     }
   },
-  "errors": {},
+  "errors": {
+    "awesome-skill-market": "HTTP 404"
+  },
   "docker": {},
   "dockerMeta": {},
   "mirror": {
@@ -426,6 +428,7 @@
     "surfbird-mcp": {},
     "dsh-control-surfbird-for-kitesurf": {},
     "opencode-control-surfbird-for-kitesurf": {},
-    "pi-control-surfbird-for-kitesurf": {}
+    "pi-control-surfbird-for-kitesurf": {},
+    "awesome-skill-market": {}
   }
 }
